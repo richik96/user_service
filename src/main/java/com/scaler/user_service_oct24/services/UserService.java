@@ -11,8 +11,8 @@ import java.util.List;
 public interface UserService {
 
     public User createUser(User user);
-    public User updateUser(Long id, User user);
-    public String deleteUser(Long id);
+    public User updateUser(Long id, User user) throws UserNotExistException;
+    public String deleteUser(Long id) throws UserNotExistException;
     public User getSingleUser(Long id) throws UserNotExistException;
     public List<User> getAllUsers();
 }

@@ -1,9 +1,10 @@
 package com.scaler.user_service_oct24.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,8 +15,9 @@ public class Address extends BaseModel{
     private String street;
     private Long number;
     private String zipcode;
-    @ManyToOne
+    @Embedded
     private Geolocation geoLocation;
-    @ManyToOne
+    @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
 }
