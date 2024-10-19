@@ -1,6 +1,6 @@
 package com.scaler.user_service_oct24.models;
 
-import jakarta.persistence.Embeddable;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
@@ -17,5 +17,6 @@ public class Geolocation extends BaseModel{
 
     @OneToOne(mappedBy = "geoLocation")
     @JoinColumn(name = "address_id")
+    @JsonBackReference
     private Address address;
 }

@@ -1,10 +1,7 @@
 package com.scaler.user_service_oct24.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,11 +14,11 @@ public class User extends BaseModel{
     private String username;
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "name_id")
     @JsonManagedReference
     private Name name;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
     @JsonManagedReference
     private Address address;
