@@ -1,5 +1,6 @@
 package com.scaler.user_service_oct24.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,9 +16,12 @@ public class Address extends BaseModel{
     private String street;
     private Long number;
     private String zipcode;
-    @Embedded
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "geoLocation_id")
     private Geolocation geoLocation;
-    @OneToOne
+    @OneToOne(mappedBy = "address")
+    @JsonBackReference
     @JoinColumn(name = "user_id")
     private User user;
 }

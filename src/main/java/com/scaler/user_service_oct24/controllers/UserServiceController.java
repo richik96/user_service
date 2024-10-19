@@ -1,6 +1,7 @@
 package com.scaler.user_service_oct24.controllers;
 
 
+import com.scaler.user_service_oct24.Dto.UserDto;
 import com.scaler.user_service_oct24.Exceptions.UserNotExistException;
 import com.scaler.user_service_oct24.models.User;
 import com.scaler.user_service_oct24.services.UserService;
@@ -36,18 +37,18 @@ public class UserServiceController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user){
+    public ResponseEntity<User> createUser(@RequestBody UserDto userDto){
         ResponseEntity<User> response = ResponseEntity.status(HttpStatus.CREATED)
                                         .header("Check result ", "Created new User")
-                                        .body(userService.createUser(user));
+                                        .body(userService.createUser(userDto));
         return response;
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user) throws UserNotExistException {
+    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody UserDto userDto) throws UserNotExistException {
         ResponseEntity<User> response = ResponseEntity.status(HttpStatus.RESET_CONTENT)
                                         .header("Check result ", "Updated User")
-                                        .body(userService.updateUser(id, user));
+                                        .body(userService.updateUser(id, userDto));
         return response;
     }
 

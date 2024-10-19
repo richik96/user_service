@@ -5,6 +5,10 @@
     <exclude-change idName="user#address_id" tagName="dropColumn" />
     <exclude-change idName="user#name_id" tagName="dropColumn" />
     <exclude-change idName="user#geolocation_id" tagName="dropColumn" />
+    <exclude-change idName="user_name#user_id" tagName="dropColumn" />
+    <exclude-change idName="user_address#longitude" tagName="dropColumn" />
+    <exclude-change idName="user_address#latitude" tagName="dropColumn" />
+    <exclude-change idName="user_geolocation" tagName="dropTable" />
   </component>
   <component name="PersistenceUnitSettings">
     <persistence-units>

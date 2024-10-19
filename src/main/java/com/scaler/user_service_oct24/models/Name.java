@@ -1,5 +1,6 @@
 package com.scaler.user_service_oct24.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
@@ -13,7 +14,8 @@ public class Name extends BaseModel {
     private String firstName;
     private String lastName;
 
-    @OneToOne
+    @JsonBackReference
+    @OneToOne(mappedBy = "name")
     private User user;
 }
 
