@@ -1,6 +1,7 @@
 package com.scaler.user_service_oct24.services;
 
 import com.scaler.user_service_oct24.Dto.UserDto;
+import com.scaler.user_service_oct24.Exceptions.SignupFailureException;
 import com.scaler.user_service_oct24.Exceptions.UserNotExistException;
 import com.scaler.user_service_oct24.models.Address;
 import com.scaler.user_service_oct24.models.Geolocation;
@@ -13,6 +14,7 @@ import com.scaler.user_service_oct24.repositories.User_NameRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -32,12 +34,16 @@ public class UserServiceImpl implements UserService{
     private AddressRepo addressRepo;
     @Autowired
     private GeolocationRepo geoRepo;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserServiceImpl(UserRepo userRepo, User_NameRepo nameRepo, AddressRepo addressRepo, GeolocationRepo geoRepo) {
+
+    public UserServiceImpl(UserRepo userRepo, User_NameRepo nameRepo, AddressRepo addressRepo, GeolocationRepo geoRepo, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepo = userRepo;
         this.nameRepo = nameRepo;
         this.addressRepo = addressRepo;
         this.geoRepo = geoRepo;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
     @Override
     public User createUser(UserDto userDto){
@@ -45,8 +51,7 @@ public class UserServiceImpl implements UserService{
         //convert DTO to user entity
         User user = new User();
         user.setEmail(userDto.getEmail());
-        user.setPhone(userDto.getPhone());
-        user.setPassword(userDto.getPassword());
+        user.setHashedPassword(userDto.getPassword());
         user.setUsername(userDto.getUsername());
 
         //Set name
@@ -127,5 +132,28 @@ public class UserServiceImpl implements UserService{
     public List<User> getAllUsers(){
 
         return userRepo.findAll();
+    }
+
+    @Override
+    public User signup(UserDto userDto) throws SignupFailureException {
+        User user = new User();
+        if(userDto.getEmail() == null || userDto.getPassword() == null || userDto.getUsername() == null) {
+            throw new SignupFailureException("Email, Password or Username cannot be null");
+        }
+        user.setEmail(userDto.getEmail());
+        user.setHashedPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
+        user.setUsername(userDto.getUsername());
+
+        return userRepo.save(user);
+    }
+
+    @Override
+    public User login(UserDto userDto) {
+        return null;
+    }
+
+    @Override
+    public String logout(String token) {
+        return null;
     }
 }

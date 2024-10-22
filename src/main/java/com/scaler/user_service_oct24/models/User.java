@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -12,7 +14,7 @@ public class User extends BaseModel{
 
     private String email;
     private String username;
-    private String password;
+    private String hashedPassword;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "name_id")
@@ -22,6 +24,8 @@ public class User extends BaseModel{
     @JoinColumn(name = "address_id")
     @JsonManagedReference
     private Address address;
-    private String phone;
+    @ManyToMany(cascade = {CascadeType.ALL})
+    private List<Role> role;
+    private boolean isEmailVerify;
 
 }

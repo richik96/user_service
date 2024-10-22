@@ -2,6 +2,7 @@ package com.scaler.user_service_oct24.controllers;
 
 
 import com.scaler.user_service_oct24.Dto.UserDto;
+import com.scaler.user_service_oct24.Exceptions.SignupFailureException;
 import com.scaler.user_service_oct24.Exceptions.UserNotExistException;
 import com.scaler.user_service_oct24.models.User;
 import com.scaler.user_service_oct24.services.UserService;
@@ -17,12 +18,28 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 public class UserServiceController {
 
-    @Autowired
+
     private UserService userService;
 
     public UserServiceController(UserService userService) {
         this.userService = userService;
     }
+
+    @GetMapping("/login")
+    public ResponseEntity<String> login(){
+        return ResponseEntity.ok("Login Page");
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<String> logout(){
+        return ResponseEntity.ok("Logout Page");
+    }
+
+    @GetMapping("/signup")
+    public ResponseEntity<User> signup(@RequestBody UserDto userDto) throws SignupFailureException {
+        return ResponseEntity.ok(userService.signup(userDto));
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getSingleUser(@PathVariable("id")  Long id) throws UserNotExistException {

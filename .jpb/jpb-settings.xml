@@ -9,6 +9,8 @@
     <exclude-change idName="user_address#longitude" tagName="dropColumn" />
     <exclude-change idName="user_address#latitude" tagName="dropColumn" />
     <exclude-change idName="user_geolocation" tagName="dropTable" />
+    <exclude-change idName="user#password" tagName="dropColumn" />
+    <exclude-change idName="user#phone" tagName="dropColumn" />
   </component>
   <component name="PersistenceUnitSettings">
     <persistence-units>
