@@ -20,12 +20,7 @@ public class User extends BaseModel{
     @JoinColumn(name = "name_id")
     @JsonManagedReference
     private Name name;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "address_id")
-    @JsonManagedReference
-    private Address address;
     @ManyToMany(cascade = {CascadeType.ALL})
     private List<Role> role;
     private boolean isEmailVerify;
-
 }

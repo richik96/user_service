@@ -1,12 +1,19 @@
 package com.scaler.user_service_oct24.controllers;
 
 
+import com.scaler.user_service_oct24.Dto.LogInRequestDto;
+import com.scaler.user_service_oct24.Dto.LogOutRequestDto;
+import com.scaler.user_service_oct24.Dto.SignUpRequestDto;
 import com.scaler.user_service_oct24.Dto.UserDto;
 import com.scaler.user_service_oct24.Exceptions.SignupFailureException;
 import com.scaler.user_service_oct24.Exceptions.UserNotExistException;
+import com.scaler.user_service_oct24.models.Token;
 import com.scaler.user_service_oct24.models.User;
 import com.scaler.user_service_oct24.services.UserService;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,19 +32,20 @@ public class UserServiceController {
         this.userService = userService;
     }
 
-    @GetMapping("/login")
-    public ResponseEntity<String> login(){
-        return ResponseEntity.ok("Login Page");
+    @PostMapping("/login")
+    public ResponseEntity<Token> login(LogInRequestDto userDto) throws UserNotExistException, SignupFailureException {
+        return ResponseEntity.ok(userService.login(userDto));
     }
 
-    @GetMapping("/logout")
-    public ResponseEntity<String> logout(){
-        return ResponseEntity.ok("Logout Page");
-    }
+//    @GetMapping("/logout")
+//    public ResponseEntity<void> logout(@RequestBody LogOutRequestDto dto){
+//       return ResponseEntity.ok(userService.logout(dto));
+//    }
 
-    @GetMapping("/signup")
-    public ResponseEntity<User> signup(@RequestBody UserDto userDto) throws SignupFailureException {
-        return ResponseEntity.ok(userService.signup(userDto));
+    @PostMapping("/signup")
+    public ResponseEntity<User> signup(@RequestBody SignUpRequestDto userDto) throws SignupFailureException {
+        ResponseEntity<User> res = ResponseEntity.ok(userService.signup(userDto));
+        return res;
     }
 
 

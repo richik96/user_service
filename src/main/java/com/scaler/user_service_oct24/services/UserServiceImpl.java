@@ -1,23 +1,27 @@
 package com.scaler.user_service_oct24.services;
 
+import com.scaler.user_service_oct24.Dto.LogInRequestDto;
+import com.scaler.user_service_oct24.Dto.LogOutRequestDto;
+import com.scaler.user_service_oct24.Dto.SignUpRequestDto;
 import com.scaler.user_service_oct24.Dto.UserDto;
 import com.scaler.user_service_oct24.Exceptions.SignupFailureException;
 import com.scaler.user_service_oct24.Exceptions.UserNotExistException;
-import com.scaler.user_service_oct24.models.Address;
-import com.scaler.user_service_oct24.models.Geolocation;
-import com.scaler.user_service_oct24.models.Name;
+import com.scaler.user_service_oct24.models.Token;
 import com.scaler.user_service_oct24.models.User;
-import com.scaler.user_service_oct24.repositories.AddressRepo;
-import com.scaler.user_service_oct24.repositories.GeolocationRepo;
+import com.scaler.user_service_oct24.repositories.TokenRepo;
 import com.scaler.user_service_oct24.repositories.UserRepo;
-import com.scaler.user_service_oct24.repositories.User_NameRepo;
 import jakarta.transaction.Transactional;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,21 +32,18 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private UserRepo userRepo;
-    @Autowired
-    private User_NameRepo nameRepo;
-    @Autowired
-    private AddressRepo addressRepo;
-    @Autowired
-    private GeolocationRepo geoRepo;
+//    @Autowired
+//    private User_NameRepo nameRepo;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    private TokenRepo tokenRepo;
 
-    public UserServiceImpl(UserRepo userRepo, User_NameRepo nameRepo, AddressRepo addressRepo, GeolocationRepo geoRepo, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserServiceImpl(UserRepo userRepo /*User_NameRepo nameRepo*/, BCryptPasswordEncoder bCryptPasswordEncoder, TokenRepo tokenRepo) {
         this.userRepo = userRepo;
-        this.nameRepo = nameRepo;
-        this.addressRepo = addressRepo;
-        this.geoRepo = geoRepo;
+        this.tokenRepo = tokenRepo;
+        //this.nameRepo = nameRepo;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
     @Override
@@ -55,30 +56,12 @@ public class UserServiceImpl implements UserService{
         user.setUsername(userDto.getUsername());
 
         //Set name
-        Name name = new Name();
-        name.setFirstName(userDto.getName().getFirstName());
-        name.setLastName(userDto.getName().getLastName());
-        Name savedName = nameRepo.save(name);
-        user.setName(savedName);
+//        Name name = new Name();
+//        name.setFirstName(userDto.getName().getFirstName());
+//        name.setLastName(userDto.getName().getLastName());
+//        Name savedName = nameRepo.save(name);
+//        user.setName(savedName);
 
-        //Set address
-        Address address = new Address();
-        address.setCity(userDto.getAddress().getCity());
-        address.setStreet(userDto.getAddress().getStreet());
-        address.setZipcode(userDto.getAddress().getZipcode());
-        address.setNumber(userDto.getAddress().getNumber());
-
-        //Set geolocation
-        Geolocation geolocation = new Geolocation();
-        geolocation.setLatitude(userDto.getAddress().getGeolocation().getLat());
-        geolocation.setLongitude(userDto.getAddress().getGeolocation().getLng());
-
-        Geolocation savedGeo = geoRepo.save(geolocation);
-        address.setGeoLocation(savedGeo);
-
-        //Set address and geolocation in address
-        Address savedAddress = addressRepo.save(address);
-        user.setAddress(savedAddress);
 
         return userRepo.save(user);
     }
@@ -135,7 +118,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User signup(UserDto userDto) throws SignupFailureException {
+    public User signup(SignUpRequestDto userDto) throws SignupFailureException {
         User user = new User();
         if(userDto.getEmail() == null || userDto.getPassword() == null || userDto.getUsername() == null) {
             throw new SignupFailureException("Email, Password or Username cannot be null");
@@ -145,15 +128,35 @@ public class UserServiceImpl implements UserService{
         user.setUsername(userDto.getUsername());
 
         return userRepo.save(user);
+
+    }
+
+//LOGIN
+    LocalDate today = LocalDate.now();
+    LocalDate thirtyDaysLater = today.plus(30, ChronoUnit.DAYS);
+    Date expiryDate = Date.from(thirtyDaysLater.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    @Override
+    public Token login(LogInRequestDto userDto) throws UserNotExistException, SignupFailureException {
+        Optional<User> u = userRepo.findByEmail(userDto.getEmail());
+        if(u.isEmpty()) {
+            throw new UserNotExistException("User does not exist");
+        }
+        User user = u.get();
+        if(! bCryptPasswordEncoder.matches(userDto.getPassword(), user.getHashedPassword())) {
+            throw new SignupFailureException("Password does not match");
+        }
+        Token token = new Token();
+        token.setUser(user);
+        token.setExpiryDate(expiryDate);
+        token.setValue(RandomStringUtils.randomAlphanumeric(128));
+
+        Token savedToken = tokenRepo.save(token);
+        return savedToken;
     }
 
     @Override
-    public User login(UserDto userDto) {
-        return null;
+    public void logout(LogOutRequestDto dto) {
+
     }
 
-    @Override
-    public String logout(String token) {
-        return null;
-    }
 }

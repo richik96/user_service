@@ -9,6 +9,7 @@ public class Configuration {
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(10);
+        //password encryption strength high = more time to generate the hash
     }
 }

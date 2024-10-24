@@ -15,8 +15,14 @@ import java.util.Optional;
 @Repository
 public interface UserRepo extends JpaRepository<User, Long> {
 
-
+    User save(User user);
     User findById(long id);
+
+    @Query("select u1_0.id,u1_0.email,u1_0.hashedPassword,u1_0.isDeleted," +
+            "u1_0.isEmailVerify,u1_0.name,u1_0.username from User u1_0" +
+            " where u1_0.email = :email")
+//    @Query("select distinct from User where email = :email")
+    Optional<User> findByEmail(@Param("email") String email);
 
     @NonNull
     List<User> findAll();
