@@ -1,6 +1,5 @@
 package com.scaler.user_service_oct24.services;
 
-import com.scaler.user_service_oct24.Dto.LogInRequestDto;
 import com.scaler.user_service_oct24.Dto.LogOutRequestDto;
 import com.scaler.user_service_oct24.Dto.SignUpRequestDto;
 import com.scaler.user_service_oct24.Dto.UserDto;
@@ -39,6 +38,8 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private TokenRepo tokenRepo;
+
+
 
     public UserServiceImpl(UserRepo userRepo /*User_NameRepo nameRepo*/, BCryptPasswordEncoder bCryptPasswordEncoder, TokenRepo tokenRepo) {
         this.userRepo = userRepo;
@@ -136,13 +137,14 @@ public class UserServiceImpl implements UserService{
     LocalDate thirtyDaysLater = today.plus(30, ChronoUnit.DAYS);
     Date expiryDate = Date.from(thirtyDaysLater.atStartOfDay(ZoneId.systemDefault()).toInstant());
     @Override
-    public Token login(LogInRequestDto userDto) throws UserNotExistException, SignupFailureException {
-        Optional<User> u = userRepo.findByEmail(userDto.getEmail());
+    public Token login(String email, String password) throws UserNotExistException, SignupFailureException {
+        Optional<User> u = userRepo.findByEmail(email);
         if(u.isEmpty()) {
+//            return null;
             throw new UserNotExistException("User does not exist");
         }
         User user = u.get();
-        if(! bCryptPasswordEncoder.matches(userDto.getPassword(), user.getHashedPassword())) {
+        if(! bCryptPasswordEncoder.matches(password, user.getHashedPassword())) {
             throw new SignupFailureException("Password does not match");
         }
         Token token = new Token();
@@ -155,8 +157,26 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void logout(LogOutRequestDto dto) {
+    public Void logout(LogOutRequestDto dto) {
 
+        Optional<Token> token1 = tokenRepo.findByValueAndDeletedEquals(dto.getToken(), false);
+        if(token1.isEmpty()) {
+            //throw exception expired or not exist
+            return null;
+        }
+        Token tk = token1.get();
+        tk.setDeleted(true);
+        tokenRepo.save(tk);
+        return null;
+    }
+
+    public User validateToken(String token) {
+        Optional<Token> token1 = tokenRepo.findByValueAndDeletedEqualsAndExpiryDateGreaterThan(token, false, new Date());
+        if(token1.isEmpty()) {
+            return null;
+        }
+        Token tk = token1.get();
+        return tk.getUser();
     }
 
 }

@@ -33,14 +33,17 @@ public class UserServiceController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Token> login(LogInRequestDto userDto) throws UserNotExistException, SignupFailureException {
-        return ResponseEntity.ok(userService.login(userDto));
+    public ResponseEntity<Token> login(@RequestBody LogInRequestDto userDto) throws UserNotExistException, SignupFailureException {
+        Token token = userService.login(userDto.getEmail(), userDto.getPassword());
+        return ResponseEntity.ok(token);
     }
 
-//    @GetMapping("/logout")
-//    public ResponseEntity<void> logout(@RequestBody LogOutRequestDto dto){
-//       return ResponseEntity.ok(userService.logout(dto));
-//    }
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestBody LogOutRequestDto dto){
+        ResponseEntity.ok(userService.logout(dto));
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @PostMapping("/signup")
     public ResponseEntity<User> signup(@RequestBody SignUpRequestDto userDto) throws SignupFailureException {
@@ -83,5 +86,10 @@ public class UserServiceController {
                                         .header("Check result ", "Deleted User")
                                         .body(userService.deleteUser(id));
         return response;
+    }
+
+    @PostMapping("/validate/{token}")
+    public User validateToken(@PathVariable("token") String token) {
+        return userService.validateToken(token);
     }
 }

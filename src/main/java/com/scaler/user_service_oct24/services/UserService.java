@@ -22,7 +22,10 @@ public interface UserService {
     public User getSingleUser(Long id) throws UserNotExistException;
     public List<User> getAllUsers();
     public User signup(SignUpRequestDto userDto) throws SignupFailureException;
-    public Token login(LogInRequestDto userDto) throws UserNotExistException, SignupFailureException;
-    public void logout(LogOutRequestDto dto);
+   // public Token login(LogInRequestDto userDto) throws UserNotExistException, SignupFailureException;
 
+    Token login(String email, String password) throws UserNotExistException, SignupFailureException;
+
+    public Void logout(LogOutRequestDto dto);
+    public User validateToken(String token);
 }
