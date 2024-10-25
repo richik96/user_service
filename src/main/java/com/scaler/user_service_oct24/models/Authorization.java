@@ -13,73 +13,72 @@ public class Authorization {
     private String registeredClientId;
     private String principalName;
     private String authorizationGrantType;
-    @Column(length = 1000)
     @Lob
+    @Column(length = 1000, columnDefinition = "TEXT")
     private String authorizedScopes;
-    @Column(length = 4000)
+    @Column(length = 4000, columnDefinition = "TEXT")
     @Lob
     private String attributes;
-    @Column(length = 500)
     @Lob
+    @Column(length = 500, columnDefinition = "TEXT")
     private String state;
 
-    @Column(length = 4000)
+    @Column(length = 4000, columnDefinition = "TEXT")
     @Lob
     private String authorizationCodeValue;
     private Instant authorizationCodeIssuedAt;
     private Instant authorizationCodeExpiresAt;
     private String authorizationCodeMetadata;
 
-    @Column(length = 4000)
+    @Column(length = 4000, columnDefinition = "TEXT")
     @Lob
     private String accessTokenValue;
     private Instant accessTokenIssuedAt;
     private Instant accessTokenExpiresAt;
     @Lob
-    @Column(length = 2000)
+    @Column(length = 2000, columnDefinition = "TEXT")
     private String accessTokenMetadata;
     private String accessTokenType;
-    @Column(length = 1000)
     @Lob
+    @Column(length = 1000, columnDefinition = "TEXT")
     private String accessTokenScopes;
 
-    @Column(length = 4000)
+    @Column(length = 4000, columnDefinition = "TEXT")
     @Lob
     private String refreshTokenValue;
     private Instant refreshTokenIssuedAt;
     private Instant refreshTokenExpiresAt;
-    @Column(length = 2000)
     @Lob
+    @Column(length = 2000, columnDefinition = "TEXT")
     private String refreshTokenMetadata;
-
-    @Column(length = 4000)
     @Lob
+    @Column(length = 4000, columnDefinition = "TEXT")
     private String oidcIdTokenValue;
     private Instant oidcIdTokenIssuedAt;
     private Instant oidcIdTokenExpiresAt;
-    @Column(length = 2000)
     @Lob
+    @Column(length = 2000, columnDefinition = "TEXT")
     private String oidcIdTokenMetadata;
-    @Column(length = 2000)
     @Lob
+    @Column(length = 2000, columnDefinition = "TEXT")
     private String oidcIdTokenClaims;
 
-    @Column(length = 4000)
+    @Column(length = 4000, columnDefinition = "TEXT")
     @Lob
     private String userCodeValue;
     private Instant userCodeIssuedAt;
     private Instant userCodeExpiresAt;
-    @Column(length = 2000)
     @Lob
+    @Column(length = 2000, columnDefinition = "TEXT")
     private String userCodeMetadata;
 
-    @Column(length = 4000)
+    @Column(length = 4000, columnDefinition = "TEXT")
     @Lob
     private String deviceCodeValue;
     private Instant deviceCodeIssuedAt;
     private Instant deviceCodeExpiresAt;
-    @Column(length = 2000)
     @Lob
+    @Column(length = 2000, columnDefinition = "TEXT")
     private String deviceCodeMetadata;
 
     public String getId() {
