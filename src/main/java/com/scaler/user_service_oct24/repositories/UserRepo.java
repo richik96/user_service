@@ -23,7 +23,7 @@ public interface UserRepo extends JpaRepository<User, Long> {
 //           " where u1_0.email = :email")
 //    @Query("select distinct from User where email = :email")
     Optional<User> findByEmail(String email);
-
+    Optional<User> findByUsername(String username);
     @NonNull
     List<User> findAll();
 
