@@ -6,9 +6,11 @@ import com.scaler.user_service_oct24.repositories.UserRepo;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class CustomUserDetailService implements UserDetailsService {
 
     private UserRepo userRepo;
@@ -19,9 +21,9 @@ public class CustomUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         Optional<User> userOptional = userRepo.findByUsername(username);
-        if(userOptional.isEmpty())
-            throw new UsernameNotFoundException("User "+username + " not found");
-
+        if(userOptional.isEmpty()) {
+            throw new UsernameNotFoundException("User " + username + " not found");
+        }
         CustomUserDetails customUserDetails = new CustomUserDetails(userOptional.get());
         return customUserDetails;
     }

@@ -1,5 +1,6 @@
 package com.scaler.user_service_oct24.security.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.scaler.user_service_oct24.models.Role;
 import com.scaler.user_service_oct24.models.User;
 import com.scaler.user_service_oct24.security.models.CustomGrantedAuthority;
@@ -10,47 +11,86 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@JsonDeserialize
 public class CustomUserDetails implements UserDetails {
 
-    private User user;
+    //private User user;
+    private List<CustomGrantedAuthority> authorities;
+    private String password;
+    private String username;
+    private boolean accountNonExpired;
+    private boolean accountNonLocked;
+    private boolean credentialsNonExpired;
+    private boolean enabled;
+    private Long userId;
+
+    public Long getUserId() {
+        return userId;
+    }
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
     public CustomUserDetails(User user) {
-        this.user = user;
+        //this.user = user;
+        this.accountNonExpired = true;
+        this.accountNonLocked = true;
+        this.credentialsNonExpired = true;
+        this.enabled = true;
+        this.userId = user.getId();
+        this.username = user.getUsername();
+        this.password = user.getHashedPassword();
+
+        List<CustomGrantedAuthority> grantedAuthorities = new ArrayList<>();
+        for (Role role : user.getRole()) {
+            grantedAuthorities.add(new CustomGrantedAuthority(role));
+        }
+
+        this.authorities = grantedAuthorities;
+    }
+
+    public CustomUserDetails() {
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<CustomGrantedAuthority> grantedAuthorities = new ArrayList<>();
-        for(Role r : user.getRole()) {
-            grantedAuthorities.add(new CustomGrantedAuthority(r));
-        }
-
-        return grantedAuthorities;
+//        List<CustomGrantedAuthority> grantedAuthorities = new ArrayList<>();
+//        for(Role r : user.getRole()) {
+//            grantedAuthorities.add(new CustomGrantedAuthority(r));
+//        }
+//        return grantedAuthorities;
+        return authorities;
     }
 
     @Override
     public String getPassword() {
-        return user.getHashedPassword();
+        //return user.getHashedPassword();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        //return user.getUsername();
+        return username;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        //return true;
+        return accountNonExpired;
     }
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        //return true;
+        return accountNonLocked;
     }
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        //return true;
+        return credentialsNonExpired;
     }
     @Override
     public boolean isEnabled() {
-        return true;
+        //return true;
+        return enabled;
     }
 }
