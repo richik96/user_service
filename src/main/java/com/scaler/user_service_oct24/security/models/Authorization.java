@@ -1,4 +1,4 @@
-package com.scaler.user_service_oct24.models;
+package com.scaler.user_service_oct24.security.models;
 
 import java.time.Instant;
 

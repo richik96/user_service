@@ -1,4 +1,4 @@
-package com.scaler.user_service_oct24.services;
+package com.scaler.user_service_oct24.security.service;
 
 import java.time.Instant;
 import java.util.List;
@@ -9,8 +9,8 @@ import java.util.function.Consumer;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scaler.user_service_oct24.models.Authorization;
-import com.scaler.user_service_oct24.repositories.AuthorizationRepository;
+import com.scaler.user_service_oct24.security.models.Authorization;
+import com.scaler.user_service_oct24.security.Repository.AuthorizationRepository;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;

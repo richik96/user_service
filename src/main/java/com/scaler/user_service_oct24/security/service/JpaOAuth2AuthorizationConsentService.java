@@ -1,8 +1,8 @@
-package com.scaler.user_service_oct24.services;
+package com.scaler.user_service_oct24.security.service;
 
 import java.util.HashSet;
 import java.util.Set;
-import com.scaler.user_service_oct24.repositories.AuthorizationConsentRepository;
+import com.scaler.user_service_oct24.security.Repository.AuthorizationConsentRepository;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,7 +13,7 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-import com.scaler.user_service_oct24.models.AuthorizationConsent;
+import com.scaler.user_service_oct24.security.models.AuthorizationConsent;
 
 
 @Component

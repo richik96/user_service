@@ -1,5 +1,6 @@
-package com.scaler.user_service_oct24.services;
+package com.scaler.user_service_oct24.security.service;
 
+import com.scaler.user_service_oct24.security.models.CustomUserDetails;
 import com.scaler.user_service_oct24.models.User;
 import com.scaler.user_service_oct24.repositories.UserRepo;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,5 +22,7 @@ public class CustomUserDetailService implements UserDetailsService {
         if(userOptional.isEmpty())
             throw new UsernameNotFoundException("User "+username + " not found");
 
+        CustomUserDetails customUserDetails = new CustomUserDetails(userOptional.get());
+        return customUserDetails;
     }
 }

@@ -1,4 +1,4 @@
-package com.scaler.user_service_oct24.repositories;
+package com.scaler.user_service_oct24.security.Repository;
 
 import java.util.ArrayList;
 import java.util.List;

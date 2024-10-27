@@ -1,8 +1,8 @@
-package com.scaler.user_service_oct24.repositories;
+package com.scaler.user_service_oct24.security.Repository;
 
 import java.util.Optional;
 
-import com.scaler.user_service_oct24.models.AuthorizationConsent;
+import com.scaler.user_service_oct24.security.models.AuthorizationConsent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
