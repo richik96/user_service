@@ -114,6 +114,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>user-service-oct4-new-image</finalName>
     </build>
 
 </project>
