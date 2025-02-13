@@ -1,4 +1,4 @@
 FROM openjdk:17
 EXPOSE 8181
-COPY target/user_service_oct24-0.0.1-SNAPSHOT.jar user_service_oct24-0.0.1-SNAPSHOT.jar
-ENTRYPOINT ["java", "-jar", "/user_service_oct24-0.0.1-SNAPSHOT.jar"]
+COPY target/user-service-oct4-new-image.jar user-service-oct4-new-image.jar
+ENTRYPOINT ["java", "-jar", "/user-service-oct4-new-image.jar"]
